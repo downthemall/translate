@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Translate DownThemAll!</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="https://downthemall.org/favicon.ico">
+</head>
+
+<body>
+  <header>
+    <h1>Translate DownThemAll!</h1>
+    <h2>Don't forget to submit your translation ;)</h2>
+    <span id="status"></span>
+    <button id="reset">Reset</button>
+    <button id="load">Load<input type="file" id="load-file" style="display: none;" accept=".json"></button>
+    <button id="save">Download</button>
+  </header>
+  <article>
+  </article>
+  <template id="item">
+    <section class="item">
+      <span class="item-status"></span>
+      <span>Name:</span>
+      <label class="item-name"></label>
+      <span class="item-description-desc">Description:</span>
+      <label class="item-description"></label>
+      <span></span>
+      <input type="text" readonly tabindex="-1" class="item-base">
+      <span>Translation:</span>
+      <input type="text" class="item-translated" spellcheck="true">
+      <pre class="item-errors"></pre>
+    </section>
+  </template>
+  <script defer src="localforage.min.js"></script>
+  <script defer type="module" src="script.js"></script>
+</body>
+
+</html>

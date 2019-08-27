@@ -1,0 +1,10 @@
+{
+  "name": "translate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Nils Maier",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^6.2.2"
+  }
+}

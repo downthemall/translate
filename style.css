@@ -1,0 +1,74 @@
+html, header, input {
+  background: rgb(34, 34, 34);
+  color: white;
+  font-family: sans-serif;
+}
+
+* {
+  font-size: 10pt;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: rgb(48, 48, 48);
+  display: grid;
+  grid-template-columns: auto 1fr repeat(4, auto);
+  align-items: center;
+  grid-column-gap: 1em;
+  position: sticky;
+  top: 0;
+  box-shadow: 2px 2px 2px black;
+}
+header, article {
+  padding: 1ex 1em;
+}
+
+header h2 {
+  justify-self: center;
+}
+
+h1 {
+  font-size: 105%;
+}
+
+.item {
+  padding: 1ex 0;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-column-gap: 1em;
+  grid-row-gap: 0.5ex;
+  align-items: center;
+  padding-bottom: 1ex;
+  margin-bottom: 1ex;
+  border-bottom: 1px dotted rgba(120, 120, 120);
+}
+
+input {
+  border: 1px solid rgb(100, 100, 100);
+  padding: 2pt;
+}
+
+input[readonly] {
+  margin-top: 1ex;
+  border: 1px solid rgb(60, 60, 60);
+}
+
+span {
+  color: lightgray;
+  font-style: italic;
+}
+
+.item-errors {
+  grid-column: 1 / -1;
+}
+
+.item-status {
+  grid-row: 1 / span 4;
+  font-size: 20pt;
+  width: 20pt;
+  margin-right: 1ex;
+}
