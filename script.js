@@ -73,6 +73,10 @@ class Item {
     return !!this.translated;
   }
 
+  get isUnchanged() {
+    return this.message === this.translated;
+  }
+
   computeErrors() {
     return [];
   }
@@ -90,8 +94,14 @@ class Item {
         if (this.errors) {
           throw new Error(errors.join("\n"));
         }
-        this.statusElem.textContent = "✓";
-        this.statusElem.style.color = "green";
+        if (this.isUnchanged) {
+          this.statusElem.textContent = "✓";
+          this.statusElem.style.color = "yellow";
+        }
+        else {
+          this.statusElem.textContent = "✓";
+          this.statusElem.style.color = "green";
+        }
       }
       finally {
         this.errorsElem.textContent = "";
@@ -189,12 +199,16 @@ class Locale {
         minimumFractionDigits: 1,
       });
       const errors = translated.reduce((p, c) => p + c.errors, 0);
+      const unchanged = translated.reduce(
+        (p, c) => p + (c.isUnchanged ? 1 : 0), 0);
+      const status = [`${tcount.toLocaleString()}/${count.toLocaleString()}`, per.toString()];
+      if (unchanged > 0) {
+        status.push(`${unchanged.toLocaleString()} unchanged`);
+      }
       if (errors) {
-        this.statusElem.textContent = `${tcount.toLocaleString()}/${count.toLocaleString()} - ${per} - ${errors.toLocaleString()} errors`;
+        status.push(`${errors.toLocaleString()} errors`);
       }
-      else {
-        this.statusElem.textContent = `${tcount.toLocaleString()}/${count.toLocaleString()} - ${per}`;
-      }
+      this.statusElem.textContent = status.join(" - ");
     }
     catch (ex) {
       console.error(ex);
