@@ -149,6 +149,11 @@ class PlaceholderItem extends Item {
         errors.push(`Placeholder "$${holder}$" not present`);
       }
     }
+    translated.replace(/\$(.+?)\$/g, (_, p) => {
+      if (!this.holders.has(p)) {
+        errors.push(`Placeholder "$${p}$" is invalid`);
+      }
+    });
     return errors;
   }
 }
