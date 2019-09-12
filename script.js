@@ -228,10 +228,16 @@ class Locale {
 
   toJSON() {
     const rv = {};
-    for (const item of this.translated) {
+    const {translated} = this;
+    for (const item of translated) {
       rv[item.id] = item;
     }
-    return rv;
+    return sort(rv,
+      ([id]) => [
+        -id.startsWith("language"),
+        id],
+      naturalCaseCompare
+    );
   }
 
   toString() {
