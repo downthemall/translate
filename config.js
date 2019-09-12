@@ -4,6 +4,7 @@ const CONFIG = {
   title: "Translate DownThemAll!",
   repo: "downthemall/downthemall",
   branch: "master",
+  baseLocale: "en",
   showAll: true,
 };
 

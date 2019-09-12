@@ -240,7 +240,7 @@ class Locale {
 }
 
 async function loadLocales() {
-  const baseLocale = await loadRemoteLocale("en");
+  const baseLocale = await loadRemoteLocale(CONFIG.baseLocale);
   const other = [];
   const work = await localforage.getItem(WORK_KEY);
   if (work) {
@@ -270,6 +270,9 @@ async function loadRepoLocales() {
   const list = await req.json();
   const el = $("#locales");
   for (const [code, name] of Object.entries(list)) {
+    if (code === CONFIG.baseLocale) {
+      continue;
+    }
     const opt = document.createElement("option");
     opt.value = code;
     opt.textContent = name;
