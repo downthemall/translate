@@ -1,9 +1,14 @@
 "use strict";
 /* globals localforage, sort, naturalCaseCompare */
 
+import CONFIG from "./config.js";
 import {sort, naturalCaseCompare} from "./sorting.js";
 
 const WORK_KEY = "_work";
+
+function $(selector, el) {
+  return (el || document).querySelector(selector);
+}
 
 function debounce(fn, to) {
   let timer;
@@ -30,8 +35,9 @@ function debounce(fn, to) {
 }
 
 async function loadRemoteLocale(code) {
+  console.info("loading remote:", code);
   const req = await fetch(
-    `https://raw.githubusercontent.com/downthemall/downthemall/master/_locales/${code}/messages.json`, {
+    `https://raw.githubusercontent.com/${CONFIG.repo}/${CONFIG.branch}/_locales/${code}/messages.json`, {
       cache: "no-cache"
     });
   const rv = await req.json();
@@ -242,7 +248,7 @@ async function loadLocales() {
       other.push(JSON.parse(work));
     }
     catch (ex) {
-      console.error(ex);
+      console.error(work, ex);
     }
   }
   other.forEach(loc => {
@@ -256,16 +262,51 @@ async function loadLocales() {
   return new Locale(baseLocale);
 }
 
+async function loadRepoLocales() {
+  const req = await fetch(
+    `https://raw.githubusercontent.com/${CONFIG.repo}/${CONFIG.branch}/_locales/all.json`, {
+      cache: "no-cache"
+    });
+  const list = await req.json();
+  const el = $("#locales");
+  for (const [code, name] of Object.entries(list)) {
+    const opt = document.createElement("option");
+    opt.value = code;
+    opt.textContent = name;
+    el.appendChild(opt);
+  }
+  console.log(list);
+}
+
 async function main() {
-  let locale = await loadLocales();
-  document.querySelector("#reset").addEventListener("click", async () => {
+  $("#title").textContent = CONFIG.title;
+  $("title").textContent = CONFIG.title;
+
+  const locales = $("#locales");
+
+  const loaders = [loadLocales()];
+  if (CONFIG.showAll) {
+    loaders.push(loadRepoLocales());
+  }
+  else {
+    locales.parentElement.removeChild(locales);
+  }
+
+  let [locale] = await Promise.all(loaders);
+
+  async function loadLocale(json) {
+    await localforage.setItem(WORK_KEY, json);
+    locale = await loadLocales();
+  }
+
+  $("#reset").addEventListener("click", async () => {
     if (confirm("Do you really want to reset your work?!\nALL WILL BE GONE!")) {
       await localforage.removeItem(WORK_KEY);
       location.reload();
     }
   });
 
-  const loadFile = document.querySelector("#load-file");
+  const loadFile = $("#load-file");
   loadFile.addEventListener("change", () => {
     if (!loadFile.files.length) {
       return;
@@ -281,8 +322,7 @@ async function main() {
         const {result} = reader;
         try {
           JSON.parse(result);
-          await localforage.setItem(WORK_KEY, result);
-          locale = await loadLocales();
+          await loadLocale(result);
         }
         catch (ex) {
           alert(`Couldn't load:\n${ex.toString()}`);
@@ -297,11 +337,32 @@ async function main() {
       loadFile.value = "";
     }
   });
-  document.querySelector("#load").addEventListener("click", () => {
+  $("#load").addEventListener("click", () => {
     loadFile.click();
   });
 
-  document.querySelector("#save").addEventListener("click", () => {
+  if (CONFIG.showAll) {
+    locales.addEventListener("change", async () => {
+      const {value} = locales;
+      if (!value || value === "---") {
+        return;
+      }
+      locales.value = "---";
+
+      if (!confirm(`Want to load the ${value} locale?\nThis will override any changes you made here.`)) {
+        return;
+      }
+      try {
+        const loc = await loadRemoteLocale(value);
+        loadLocale(JSON.stringify(loc));
+      }
+      catch (ex) {
+        console.error(ex);
+      }
+    });
+  }
+
+  $("#save").addEventListener("click", () => {
     const content = new Blob([locale.toString()], {
       type: "application/json",
     });

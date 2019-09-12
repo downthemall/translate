@@ -16,7 +16,7 @@ html, body {
 header {
   background: rgb(48, 48, 48);
   display: grid;
-  grid-template-columns: auto 1fr repeat(4, auto);
+  grid-template-columns: auto 1fr repeat(5, auto);
   align-items: center;
   grid-column-gap: 1em;
   position: sticky;

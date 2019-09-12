@@ -3,16 +3,19 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Translate DownThemAll!</title>
+  <title>Translate!</title>
   <link rel="stylesheet" href="style.css">
   <link rel="shortcut icon" href="https://downthemall.org/favicon.ico">
 </head>
 
 <body>
   <header>
-    <h1>Translate DownThemAll!</h1>
+    <h1 id="title">Translate!</h1>
     <h2>Don't forget to submit your translation ;)</h2>
     <span id="status"></span>
+    <select id="locales">
+      <option value="---" id="nolocale">Load from repo</option>
+    </select>
     <button id="reset">Reset</button>
     <button id="load">Load<input type="file" id="load-file" style="display: none;" accept=".json"></button>
     <button id="save">Download</button>
