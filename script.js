@@ -257,7 +257,7 @@ async function loadLocales() {
 }
 
 async function main() {
-  const locale = await loadLocales();
+  let locale = await loadLocales();
   document.querySelector("#reset").addEventListener("click", async () => {
     if (confirm("Do you really want to reset your work?!\nALL WILL BE GONE!")) {
       await localforage.removeItem(WORK_KEY);
@@ -282,7 +282,7 @@ async function main() {
         try {
           JSON.parse(result);
           await localforage.setItem(WORK_KEY, result);
-          await loadLocales();
+          locale = await loadLocales();
         }
         catch (ex) {
           alert(`Couldn't load:\n${ex.toString()}`);
