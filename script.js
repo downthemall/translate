@@ -284,6 +284,7 @@ async function loadRepoLocales() {
 async function main() {
   $("#title").textContent = CONFIG.title;
   $("title").textContent = CONFIG.title;
+  $("#byline").textContent = CONFIG.byline;
 
   const locales = $("#locales");
 
