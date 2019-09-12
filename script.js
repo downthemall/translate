@@ -1,5 +1,5 @@
 "use strict";
-/* globals localforage, sort, naturalCaseCompare */
+/* globals localforage */
 
 import CONFIG from "./config.js";
 import {sort, naturalCaseCompare} from "./sorting.js";
