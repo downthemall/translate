@@ -49,6 +49,7 @@ h1 {
 
 input {
   border: 1px solid rgb(100, 100, 100);
+  background: rgb(100, 100, 100, 0.05);
   padding: 2pt;
 }
 
