@@ -2,7 +2,7 @@
 /* globals localforage */
 
 import CONFIG from "./config.js";
-import {sort, naturalCaseCompare} from "./sorting.js";
+import {sort, sorted, naturalCaseCompare} from "./sorting.js";
 
 const WORK_KEY = "_work";
 
@@ -227,17 +227,14 @@ class Locale {
   }
 
   toJSON() {
-    const rv = {};
     const {translated} = this;
-    for (const item of translated) {
-      rv[item.id] = item;
-    }
-    return sort(rv,
-      ([id]) => [
-        -id.startsWith("language"),
-        id],
-      naturalCaseCompare
-    );
+    const rv = {};
+    sorted(
+      translated,
+      ({id}) => [-id.startsWith("language"), id],
+      naturalCaseCompare).
+      forEach(i => rv[i.id] = i);
+    return rv;
   }
 
   toString() {
